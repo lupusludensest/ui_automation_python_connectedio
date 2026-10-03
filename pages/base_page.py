@@ -1,3 +1,5 @@
+import os
+
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -6,7 +8,9 @@ class Page:
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 15)
-        self.base_url = 'https://devcloud.connectedio.com'
+        self.base_url = os.environ.get(
+            "APP_BASE_URL", "https://devcloud.connectedio.com"
+        ).rstrip("/")
 
     def click(self, *locator):
         """

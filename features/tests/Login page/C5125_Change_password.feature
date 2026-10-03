@@ -6,7 +6,7 @@ Feature: # C5125 Change_password
     Then Login with the given credentials
     Then Go to the "Change Password" page https://devcloud.connectedio.com/profile/change-password
     And https://devcloud.connectedio.com/profile/change-password is open
-    Then Enter the old password in the field "New Password" MyUSA2016!@
-    And Enter the old password in the field "Confirm New Password" MyUSA2016!@
+    Then Enter the old password in the field "New Password" @env:APP_CURRENT_PASSWORD
+    And Enter the old password in the field "Confirm New Password" @env:APP_CURRENT_PASSWORD
     Then Click on the button "Save"
     And Verify the words Old and new password cannot be same. is on the page

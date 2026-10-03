@@ -3,6 +3,6 @@ Feature: # C5119 Login enter the incorrect email address
 
   Scenario: # C5119 Login enter the incorrect email address and verify Invalid Login or Password is here
     Given Loginpage
-    Then Enter valid, but the incorrect email address in the line "Email address" vadim_wrong@mailinator.com
-    Then Enter the correct password in the line "Password" manicpiano731
+    Then Enter valid, but the incorrect email address in the line "Email address" not-a-real-user@example.invalid
+    Then Enter the correct password in the line "Password" @env:APP_PASSWORD
     Then Verify Invalid Login or Password is on login pop_up

@@ -108,7 +108,7 @@ options.add_argument('--ignore-certificate-errors')
 options.add_argument("--test-type")
 options.binary_location = "/usr/bin/chromium"
 # driver = webdriver.Chrome(chrome_options=options)
-images = driver.find_elements_by_tag_name('img')
+images = driver.find_elements(By.TAG_NAME, "img")
 pics_on_page = len(images)
 for image in images:
     print(image.get_attribute('src'))

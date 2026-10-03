@@ -1,30 +1,29 @@
+import os
+
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 
 from app.application import Application
+
+load_dotenv()
+
 
 def browser_init(context):
     """
     :param context: Behave context
     """
     options = webdriver.ChromeOptions()
-    options.add_argument('--disable-gpu')
-    options.add_argument('--headless')
-    options.headless = False
+    if os.environ.get("HEADLESS", "").lower() in {"1", "true", "yes"}:
+        options.add_argument("--headless=new")
     context.driver = webdriver.Chrome(options=options)
-
-    # context.driver = webdriver.Chrome(desired_capabilities={"proxy": {"proxyType": "MANUAL", "httpProxy": "localhost:8888"}})
-    # context.driver = webdriver.Chrome(desired_capabilities={"chromeOptions": {"args": ["--start-fullscreen"]}})
-    # context.driver = webdriver.Chrome()
-    # context.driver = webdriver.Firefox(executable_path = "C:\Webdrivers\geckodriver")
-    # context.driver = webdriver.Edge(executable_path = "C:\Webdrivers\MicrosoftWebDriver")
-    # context.browser = webdriver.Safari()
 
     context.driver.maximize_window()
     context.driver.implicitly_wait(4)
     context.driver.wait = WebDriverWait(context.driver, 15)
 
     context.app = Application(context.driver)
+
 
 def before_scenario(context, scenario):
     print('\nStarted scenario: ', scenario.name, '.')

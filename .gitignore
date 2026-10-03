@@ -1,0 +1,21 @@
+# Local environment and virtual environments
+.env
+.env.*
+.venv/
+venv/
+
+# Python-generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Generated test and Allure reports
+test_results/*
+!test_results/.gitkeep
+allure-results/
+allure-report/
+
+# macOS
+.DS_Store

@@ -1,5 +1,8 @@
 from behave import *
 
+from features.steps.env_values import resolve_env_value
+
+
 @then('Go to the "Change Password" page https://devcloud.connectedio.com/profile/change-password')
 def go_to_chng_pswrd_pg(context):
     """
@@ -21,7 +24,7 @@ def ntr_old_pswd(context, old_pswd):
     """
     Enter the old password in the field "New Password" MyUSA2016!@
     """
-    context.app.main_page.ntr_old_pswd(old_pswd)
+    context.app.main_page.ntr_old_pswd(resolve_env_value(old_pswd))
 
 
 @step('Enter the old password in the field "Confirm New Password" {old_pswd}')
@@ -29,7 +32,7 @@ def cfrm_old_pswd(context, old_pswd):
     """
     Enter the old password in the field "Confirm New Password" MyUSA2016!@
     """
-    context.app.main_page.cfrm_old_pswd(old_pswd)
+    context.app.main_page.cfrm_old_pswd(resolve_env_value(old_pswd))
 
 
 @then('Click on the button "Save"')
@@ -54,5 +57,4 @@ def old_new_r_nt_same(context, old_nw_r_nt_same):
     Verify the words Old and new password cannot be same. is on the page
     """
     context.app.main_page.old_new_r_nt_same(old_nw_r_nt_same)
-
 

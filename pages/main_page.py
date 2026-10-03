@@ -1,3 +1,5 @@
+import os
+
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -161,12 +163,18 @@ class MainPage(Page):
     sleep(2)
     def lgn_w_gn_crdntls(self):
         wait = WebDriverWait(self.driver, 10)
+        username = os.environ.get("APP_USERNAME")
+        password = os.environ.get("APP_PASSWORD")
+        if not username or not password:
+            raise RuntimeError(
+                "Set APP_USERNAME and APP_PASSWORD in your local .env file."
+            )
         # 2. Send Login e-mail
         wait.until(EC.presence_of_element_located(LOGIN_EMAIL)).clear()
-        wait.until(EC.presence_of_element_located(LOGIN_EMAIL)).send_keys('gurovvic@gmail.com') # vadim@mailinator.com
+        wait.until(EC.presence_of_element_located(LOGIN_EMAIL)).send_keys(username)
         # 3. Send Password
         wait.until(EC.presence_of_element_located(LOGIN_PASSWORD)).clear()
-        wait.until(EC.presence_of_element_located(LOGIN_PASSWORD)).send_keys('MyUSA2016!@') # manicpiano731
+        wait.until(EC.presence_of_element_located(LOGIN_PASSWORD)).send_keys(password)
         # 4. Click on Login buclck_usr_nmtton
         wait.until(EC.element_to_be_clickable(LOGIN_BTN)).click()
         # 5. Click on pop-window OK button
@@ -501,7 +509,7 @@ class MainPage(Page):
         options.add_argument("--test-type")
         options.binary_location = "/usr/bin/chromium"
         # driver = webdriver.Chrome(chrome_options=options)
-        images = self.driver.find_elements_by_tag_name('img')
+        images = self.driver.find_elements(By.TAG_NAME, "img")
         pics_on_page = len(images)
         for image in images:
             print(image.get_attribute('src'))
@@ -1239,7 +1247,7 @@ class MainPage(Page):
         options.add_argument('--ignore-certificate-errors')
         options.add_argument("--test-type")
         options.binary_location = "/usr/bin/chromium"
-        images = self.driver.find_elements_by_tag_name('img')
+        images = self.driver.find_elements(By.TAG_NAME, "img")
         pics_on_page = len(images)
         for image in images:
             print((image.get_attribute('src')))

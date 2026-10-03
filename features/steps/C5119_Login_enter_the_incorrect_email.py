@@ -1,18 +1,21 @@
 from behave import *
 
+from features.steps.env_values import resolve_env_value
+
+
 @then('Enter valid, but the incorrect email address in the line "Email address" {email}')
 def entr_vld_wrng_eml(context, email):
     """
     Enter valid, but the incorrect email address in the line "Email address"'
     """
-    context.app.main_page.entr_vld_wrng_eml(email)
+    context.app.main_page.entr_vld_wrng_eml(resolve_env_value(email))
 
 @then('Enter the correct password in the line "Password" {pswd}')
 def entr_vld_crct_pswd(context, pswd):
     """
     Enter the correct password in the line "Password" manicpiano731
     """
-    context.app.main_page.entr_vld_crct_pswd(pswd)
+    context.app.main_page.entr_vld_crct_pswd(resolve_env_value(pswd))
 
 @then("Verify {vrf_invld_lgn_r_pswd_hr} is on login pop_up")
 def vrf_invld_lgn_r_pswd_hr(context, vrf_invld_lgn_r_pswd_hr):

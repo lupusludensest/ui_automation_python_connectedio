@@ -1,20 +1,47 @@
-$ brew install allure
-$ pip install selenium
-$ pip install allure-behave
-$ pip install allure-pytest
-$ pip install pytest-allure-adaptor
-$ pip uninstall behave
-$ pip3 install behave
+## Current setup
 
-Запустить отчёт/Run report:
-$ behave -f allure_behave.formatter:AllureFormatter -o test_results/ features/
-Загрузить отчёт/Upload report to browser:
-$ allure serve test_results/
+Use Python 3.11 or newer in a virtual environment. From the project root:
 
-Если проблема: behave: error: format=allure_behave.formatter:AllureFormatter is unknown.
-$ pip install --upgrade pip
-pip install allure-behave
-behave -f allure_behave.formatter:AllureFormatter -o %allure_result_folder% ./features
+```shell
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+cp .env.example .env
+python -m behave --format allure_behave.formatter:AllureFormatter --outfile test_results/ features/
+```
+
+On Windows PowerShell, activate the environment with
+`.venv\Scripts\Activate.ps1` and copy the template using
+`Copy-Item .env.example .env`. In Command Prompt, use
+`.venv\Scripts\activate.bat` and `copy .env.example .env`.
+
+Edit `.env` with the authorized test site's URL and credentials. Keep `.env`
+local; commit only `.env.example`, which contains variable names and safe
+defaults, not credentials.
+
+Install Google Chrome separately. Selenium 4.50+ uses Selenium Manager to
+resolve the matching browser driver; do not add a platform-specific driver
+binary such as `chromedriver.exe` to the repository.
+
+To view the generated report, install Allure Commandline separately (on macOS,
+run `brew install allure`) and then run:
+
+```shell
+allure serve test_results/
+```
+
+For a headless Chrome run, set `HEADLESS=true` before running Behave. On macOS
+or Linux:
+
+```shell
+HEADLESS=true python -m behave --format allure_behave.formatter:AllureFormatter --outfile test_results/ features/
+```
+
+On Windows Command Prompt, use `set HEADLESS=true` before the Behave command.
+
+The test target configured in `pages/base_page.py` must be reachable for
+browser scenarios to pass.
 
 Сборка html-отчета на локальной машине
 
@@ -56,10 +83,8 @@ Server started at <http://192.168.56.1:53498/>. Press <Ctrl+C> to exit
 http://192.168.56.1:53498/index.html
 
 ##########
-1. Just provoke Jenkins;
-2. Create requirements.txt: pip freeze > requirements.txt
-3. Define path to modul: which python3
-4. Renew requirements.txt: pip install --upgrade -r requirements.txt
+1. Configure the project environment with the `requirements.txt` file at the repository root.
+2. Run the Behave command documented in the current setup section above.
 
 ##########
 Renew git to the latest version
@@ -82,10 +107,8 @@ python 001_main_page_text_here.py;002_main_page_logo_here.py;003_main_page_phone
 011_shop_by_brands_have_nine_submenu.py;012_cart_has_one_item.py;013_register_and_enter.py;014_payments_logopics_here.py
 
 ##########
-# Create requirements.txt
-pip freeze > requirements.txt
-# Update requirements.txt
-pip install -r requirements.txt --upgrade
+# Install or refresh the framework dependencies in the active virtual environment.
+python -m pip install -r requirements.txt
 
 ##########
 # retrieve the version of Selenium currently installed, from Python
