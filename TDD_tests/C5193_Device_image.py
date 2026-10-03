@@ -1,8 +1,18 @@
+import os
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from dotenv import load_dotenv
+
+load_dotenv()
+
+base_url = os.environ.get("APP_BASE_URL", "https://devcloud.connectedio.com").rstrip("/")
+username = os.environ.get("APP_USERNAME")
+password = os.environ.get("APP_PASSWORD")
+if not username or not password:
+    raise RuntimeError("Set APP_USERNAME and APP_PASSWORD in your local .env file.")
 
 driver = webdriver.Chrome()
 driver.maximize_window()
@@ -38,15 +48,15 @@ DVC_PCTR = (By.XPATH, "//img[@src='https://connectedio.s3-us-west-1.amazonaws.co
 wait = WebDriverWait(driver, 15)
 
 # 1. Open the url
-driver.get( 'https://devcloud.connectedio.com' )
+driver.get(base_url)
 
 # 2. Send Login e-mail
 wait.until(EC.presence_of_element_located(LOGIN_EMAIL)).clear()
-wait.until(EC.presence_of_element_located(LOGIN_EMAIL)).send_keys('gurovvic@gmail.com') # vadim@mailinator.com
+wait.until(EC.presence_of_element_located(LOGIN_EMAIL)).send_keys(username)
 
 # 3. Send Password
 wait.until(EC.presence_of_element_located(LOGIN_PASSWORD)).clear()
-wait.until(EC.presence_of_element_located(LOGIN_PASSWORD)).send_keys('MyUSA2016!@') # manicpiano731
+wait.until(EC.presence_of_element_located(LOGIN_PASSWORD)).send_keys(password)
 
 # 4. Click on Login button
 wait.until(EC.element_to_be_clickable(LOGIN_BTN)).click()
@@ -56,7 +66,7 @@ wait.until(EC.element_to_be_clickable(POP_UP_WNDW_OK_BTN)).click()
 
 # 6. Go to the Devices page https://devcloud.connectedio.com/devices
 wait.until(EC.element_to_be_clickable(DVCS_ICN)).click()
-expected_text = 'https://devcloud.connectedio.com/devices'
+expected_text = f'{base_url}/devices'
 actual_text = driver.current_url
 assert expected_text in actual_text
 if expected_text == actual_text:
@@ -120,10 +130,6 @@ if expected_text == actual_text:
 else:
     print(f'Expected "{expected_text}", but got: "{actual_text}" \n')
 # Pictures
-options = webdriver.ChromeOptions()
-options.add_argument('--ignore-certificate-errors')
-options.add_argument("--test-type")
-options.binary_location = "/usr/bin/chromium"
 images = driver.find_elements(By.TAG_NAME, "img")
 pics_on_page = len(images)
 for image in images:
